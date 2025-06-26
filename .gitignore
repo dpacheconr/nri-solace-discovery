@@ -29,6 +29,7 @@ config/newrelic-infra.yml
 .venv
 venv/
 ENV/
+.vscode/
 
 # OS specific
 .DS_Store

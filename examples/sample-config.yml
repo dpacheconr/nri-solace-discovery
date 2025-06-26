@@ -1,0 +1,41 @@
+---
+# This is an example New Relic Flex configuration showcasing the data collected from Solace
+
+SOLACE_BASE_URL: "https://your-solace-broker.example.com:943/SEMP/v2/monitor"
+SOLACE_USERNAME: "your-username" 
+SOLACE_PASSWORD: "your-password"
+
+# Key metrics collected from Solace:
+
+# VPN Level Metrics:
+# - Message rates (Rx/Tx)
+# - Byte rates (Rx/Tx)
+# - Connection counts
+# - Spool usage
+# - State (up/down)
+
+# Queue Level Metrics:
+# - Message rates (Rx/Tx)
+# - Byte rates (Rx/Tx)
+# - Spool usage
+# - Bind counts
+# - Message counts (spooled, discarded)
+
+# Topic Endpoint Metrics:
+# - Message rates (Rx/Tx)
+# - Byte rates (Rx/Tx)
+# - Spool usage
+# - Bind counts
+# - Message counts (spooled, discarded)
+
+# Client Connection Metrics:
+# - Message rates (Rx/Tx)
+# - Byte rates (Rx/Tx)
+# - Connection state
+# - Uptime
+
+# Bridge Metrics:
+# - Message rates (Rx/Tx)
+# - Byte rates (Rx/Tx)
+# - Connection state
+# - Bridge state

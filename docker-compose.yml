@@ -1,0 +1,44 @@
+services:
+  nri_solace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nri_solace
+    command: ["newrelic-infra", "-debug"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /:/host:ro
+      - /sys:/host/sys:ro
+      - /proc:/host/proc:ro
+      - ./config/solace-env-config.yml:/usr/bin/solace-env-config.yml:ro
+      - ./config/solace-flex-config.yml:/etc/newrelic-infra/integrations.d/solace-flex-config.yml:ro
+      - ./config/newrelic-infra.yml:/etc/newrelic-infra.yml:ro
+      - ./src/entrypoint.py:/usr/bin/entrypoint.py:ro
+      - nri-data:/var/db/newrelic-infra
+    environment:
+      - NRIA_DISPLAY_NAME=solace-monitor
+      - NRIA_LOG_LEVEL=debug
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "newrelic-infra", "diagnose"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  nri-data:
+    driver: local

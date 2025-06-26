@@ -1,0 +1,9 @@
+SOLACE_BASE_URL: "{HTTPS_OR_HTTP}://{YOUR_SOLACE_ADDRESS_OR_IP}:{YOUR_CUSTOM_PORT}"
+# Note: If using a non-standard port, include it in the URL: "https://{YOUR_SOLACE_CLOUD_ADDRESS}:{YOUR_CUSTOM_PORT}/SEMP/v2/monitor"
+SOLACE_USERNAME: "{YOUR_SOLACE_USERNAME}"
+SOLACE_PASSWORD: "{YOUR_SOLACE_PASSWORD}"
+# Python path - default is python3 for Linux host, /opt/venv/bin/python3 for Docker
+PYTHON_PATH: "python3"
+# Logging configuration
+SOLACE_LOG_DIRECTORY: "/var/log/newrelic-solace"  # Directory for log files
+SOLACE_LOG_LEVEL: "INFO"  # Can be DEBUG, INFO, WARNING, ERROR, or CRITICAL

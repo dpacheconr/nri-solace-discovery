@@ -1,0 +1,518 @@
+{
+  "/* IMPORTANT: Replace all instances of accountId 3428733 with your New Relic account ID before importing */": "",
+  "/* See README.md for dashboard setup instructions */": "",
+  "name": "Solace PubSub+ Complete Monitoring Dashboard",
+  "description": "Comprehensive monitoring dashboard for Solace PubSub+ brokers with VPN, Queue, Topic Endpoint, Bridge, and Client metrics",
+  "permissions": "PUBLIC_READ_WRITE",
+  "pages": [
+    {
+      "name": "Solace Overview",
+      "description": "Overview of all Solace VPNs and resources",
+      "widgets": [
+        {
+          "title": "VPN Count",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT uniqueCount(vpnname) FROM SolaceVPNSummary"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Total Queues",
+          "layout": {
+            "column": 5,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT uniqueCount(queuename) FROM SolaceQueueSummary"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Total Topic Endpoints",
+          "layout": {
+            "column": 9,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT uniqueCount(topicendpointname) FROM SolaceTopicEndpointMetrics"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "VPNs by Message Count",
+          "layout": {
+            "column": 1,
+            "row": 4,
+            "width": 6,
+            "height": 4
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.pie"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT sum(rxmsgcount) FROM SolaceVPNDetailedMetrics FACET vpnname TIMESERIES"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "VPNs by Connection Count",
+          "layout": {
+            "column": 7,
+            "row": 4,
+            "width": 6,
+            "height": 4
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.pie"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT uniqueCount(clientname) FROM SolaceClientMetrics FACET vpnname"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "VPN Metrics",
+      "description": "Detailed metrics for each Message VPN",
+      "widgets": [
+        {
+          "title": "VPN Message Rate",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 12,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT rate(rxmsgcount, 1 minute) AS 'Receive Rate', rate(txmsgcount, 1 minute) AS 'Transmit Rate' FROM SolaceVPNDetailedMetrics FACET vpnname TIMESERIES"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "VPN Connections",
+          "layout": {
+            "column": 1,
+            "row": 4,
+            "width": 12,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT uniqueCount(clientname) AS 'Connections', sum(datarxbytecount)/1024/1024 AS 'Data Received (MB)', sum(datatxbytecount)/1024/1024 AS 'Data Transmitted (MB)' FROM SolaceClientMetrics FACET vpnname"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "VPN Disk Usage",
+          "layout": {
+            "column": 1,
+            "row": 9,
+            "width": 12,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT sum(msgspoolusagebytecount)/1024/1024 AS 'Spool Usage (MB)' FROM SolaceVPNDetailedMetrics FACET vpnname TIMESERIES"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Queue Metrics",
+      "description": "Detailed metrics for message queues",
+      "widgets": [
+        {
+          "title": "Top 10 Queues by Message Count",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 6,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT latest(spooledmsgcount) FROM SolaceQueueStats FACET vpnname, queuename LIMIT 10"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Top 10 Queues by Spool Usage",
+          "layout": {
+            "column": 7,
+            "row": 1,
+            "width": 6,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT latest(spooledbytecount)/1024/1024 AS 'Spool Usage (MB)' FROM SolaceQueueStats FACET vpnname, queuename LIMIT 10"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Queue Message Rate Over Time",
+          "layout": {
+            "column": 1,
+            "row": 6,
+            "width": 12,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT rate(spooledmsgcount, 1 minute) AS 'Receive Rate', rate(txmsgcount, 1 minute) AS 'Transmit Rate' FROM SolaceQueueStats FACET queuename, vpnname LIMIT 5 TIMESERIES"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Topic Endpoint Metrics",
+      "description": "Detailed metrics for topic endpoints",
+      "widgets": [
+        {
+          "title": "Top 10 Topic Endpoints by Message Count",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 6,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT latest(spooledmsgcount) FROM SolaceTopicEndpointMetrics FACET vpnname, topicendpointname LIMIT 10"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Topic Endpoints by Spool Usage",
+          "layout": {
+            "column": 7,
+            "row": 1,
+            "width": 6,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT latest(spooledbytecount)/1024/1024 AS 'Spool Usage (MB)' FROM SolaceTopicEndpointMetrics FACET vpnname, topicendpointname LIMIT 10"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Topic Endpoint Message Rate",
+          "layout": {
+            "column": 1,
+            "row": 6,
+            "width": 12,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT rate(spooledmsgcount, 1 minute) AS 'Receive Rate', rate(txmsgcount, 1 minute) AS 'Transmit Rate' FROM SolaceTopicEndpointMetrics FACET topicendpointname, vpnname LIMIT 5 TIMESERIES"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bridges & Connectivity",
+      "description": "Bridge and client connection metrics",
+      "widgets": [
+        {
+          "title": "Bridge Status",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 12,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT latest(adminState) AS 'Admin State', latest(inboundState) AS 'Inbound State', latest(outboundState) AS 'Outbound State' FROM SolaceBridgeMetrics FACET vpnname, bridgename"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Client Connections",
+          "layout": {
+            "column": 1,
+            "row": 6,
+            "width": 12,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT latest(clientaddress) AS 'Client Address', latest(clientusername) AS 'Username', latest(uptime) AS 'Uptime (s)' FROM SolaceClientMetrics FACET vpnname, clientname"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Bridge Message Rate",
+          "layout": {
+            "column": 1,
+            "row": 11,
+            "width": 12,
+            "height": 5
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountIds": [3428733],
+                "query": "SELECT rate(rxmsgcount, 1 minute) AS 'Receive Rate', rate(txmsgcount, 1 minute) AS 'Transmit Rate' FROM SolaceBridgeMetrics FACET vpnname, bridgename TIMESERIES"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "name": "solace_vpn",
+      "title": "Message VPN",
+      "type": "NRQL",
+      "nrqlQuery": {
+        "accountIds": [3428733],
+        "query": "FROM SolaceVPNSummary SELECT uniques(vpnname) SINCE 1 hour ago"
+      },
+      "defaultValues": [],
+      "isMultiSelection": true,
+      "replacementStrategy": "STRING"
+    }
+  ]
+}

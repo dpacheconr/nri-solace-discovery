@@ -1,0 +1,9 @@
+# Core dependencies
+requests==2.32.3  # HTTP client for API calls
+PyYAML==6.0.2    # YAML configuration parsing
+urllib3==2.3.0   # HTTP client dependency
+
+# Support libraries
+certifi==2025.1.31        # SSL/TLS certificate validation
+charset-normalizer==3.4.1 # Character encoding detection
+idna==3.10               # Internationalized domain names
